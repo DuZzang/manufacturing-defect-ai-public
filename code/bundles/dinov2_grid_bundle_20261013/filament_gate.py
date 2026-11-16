@@ -105,7 +105,7 @@ def overlay(crop, bgr=False, color=(255, 40, 40), alpha=0.55):
 
 
 def otsu_ratio(crop, bgr=False):
-    """비교용: 기존 게이트 값 (팀원 A check_filament_presence와 같은 Otsu 밝은 픽셀 비율)."""
+    """비교용: 기존 게이트 값 (팀원 A의 check_filament_presence와 같은 Otsu 밝은 픽셀 비율)."""
     g = cv2.cvtColor(np.ascontiguousarray(crop, dtype=np.uint8), cv2.COLOR_BGR2GRAY if bgr else cv2.COLOR_RGB2GRAY)
     _, b = cv2.threshold(g, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return float((b > 0).mean())
