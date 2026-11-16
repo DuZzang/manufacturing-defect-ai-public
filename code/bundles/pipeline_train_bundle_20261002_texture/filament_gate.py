@@ -2,7 +2,7 @@
 
 고정 크롭 안에서 "흰 출력물이 보이는 면적 비율"을 계산하고, 기준(기본 0.1) 미만이면 판정 보류.
 
-기존 게이트(원욱님 Otsu 밝은 픽셀 비율)는 반짝이 베드를 필라멘트로 잡아서
+기존 게이트(팀원 A의 Otsu 밝은 픽셀 비율)는 반짝이 베드를 필라멘트로 잡아서
 베드만 찍힌 사진도 0.27~0.51이 나왔음. 이 게이트는 밝기 대신 '질감'을 봄:
   - 흰 출력물: 매끈함 (주변 9x9 밝기 표준편차 2~5)
   - 반짝이 베드: 들쭉날쭉 (표준편차 20~30)
@@ -17,8 +17,8 @@
 사용법
   from filament_gate import crop_roi, filament_ratio, gate
   crop = crop_roi(img)                    # 원본 1600x1200 -> 고정 크롭 1000x1000
-  r = filament_ratio(crop)                # RGB 입력 기본 (PIL, 두현님 pipeline.py와 같음)
-  r = filament_ratio(crop, bgr=True)      # cv2.imread로 읽은 BGR 입력 (원욱님 코드)
+  r = filament_ratio(crop)                # RGB 입력 기본 (PIL, 본인 pipeline.py와 같음)
+  r = filament_ratio(crop, bgr=True)      # cv2.imread로 읽은 BGR 입력 (팀원 A 코드)
   ok, r = gate(crop, threshold=0.1)       # ok=False면 판정 보류
 
 필요 패키지: numpy, opencv-python (Colab 기본 설치됨)
@@ -26,7 +26,7 @@
 import cv2
 import numpy as np
 
-ROI = (0, 250, 1000, 1250)       # ymin, xmin, ymax, xmax (원욱님·두현님과 같은 고정 크롭)
+ROI = (0, 250, 1000, 1250)       # ymin, xmin, ymax, xmax (팀원 A·본인과 같은 고정 크롭)
 THRESHOLD = 0.1                  # 이 비율 미만이면 판정 보류
 SIZE = 250                       # 계산용 축소 크기
 WIN = 9                          # 질감을 보는 창 크기 (축소 이미지 기준)
@@ -61,7 +61,7 @@ def texture_mask(crop, bgr=False):
 
 
 def filament_ratio(crop, bgr=False):
-    """출력물 면적 비율 (0~1). 두현님 pipeline.py의 filament_ratio(rgb_crop)와 같은 형태로 쓸 수 있음."""
+    """출력물 면적 비율 (0~1). 본인 pipeline.py의 filament_ratio(rgb_crop)와 같은 형태로 쓸 수 있음."""
     return float(texture_mask(crop, bgr)[0].mean())
 
 
@@ -81,7 +81,7 @@ def overlay(crop, bgr=False, color=(255, 40, 40), alpha=0.55):
 
 
 def otsu_ratio(crop, bgr=False):
-    """비교용: 기존 게이트 값 (원욱님 check_filament_presence와 같은 계산, Otsu 밝은 픽셀 비율)."""
+    """비교용: 기존 게이트 값 (팀원 A check_filament_presence와 같은 계산, Otsu 밝은 픽셀 비율)."""
     g = cv2.cvtColor(np.ascontiguousarray(crop, dtype=np.uint8), cv2.COLOR_BGR2GRAY if bgr else cv2.COLOR_RGB2GRAY)
     _, b = cv2.threshold(g, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return float((b > 0).mean())

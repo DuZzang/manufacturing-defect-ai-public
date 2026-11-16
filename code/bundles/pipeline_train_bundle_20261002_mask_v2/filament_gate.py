@@ -19,7 +19,7 @@
 사용법
   from filament_gate import crop_roi, filament_ratio, gate, mask_bed
   crop = crop_roi(img)                     # 원본 1600x1200 -> 고정 크롭 1000x1000
-  r = filament_ratio(crop)                 # RGB 기본 (두현님 pipeline.py와 같은 형태)
+  r = filament_ratio(crop)                 # RGB 기본 (본인 pipeline.py와 같은 형태)
   ok, r = gate(crop, bgr=True)             # cv2로 읽은 BGR이면 bgr=True. ok=False면 판정 보류
   masked, r = mask_bed(crop, bgr=True)     # 베드를 회색 칠한 크롭 (입력과 같은 크기·색 순서)
 
@@ -73,7 +73,7 @@ def object_mask(crop, bgr=False):
 
 
 def filament_ratio(crop, bgr=False):
-    """출력물 면적 비율 (0~1). 두현님 filament_ratio(rgb_crop)와 같은 형태."""
+    """출력물 면적 비율 (0~1). 본인 filament_ratio(rgb_crop)와 같은 형태."""
     return float(object_mask(crop, bgr).mean())
 
 
@@ -105,7 +105,7 @@ def overlay(crop, bgr=False, color=(255, 40, 40), alpha=0.55):
 
 
 def otsu_ratio(crop, bgr=False):
-    """비교용: 기존 게이트 값 (원욱님 check_filament_presence와 같은 Otsu 밝은 픽셀 비율)."""
+    """비교용: 기존 게이트 값 (팀원 A check_filament_presence와 같은 Otsu 밝은 픽셀 비율)."""
     g = cv2.cvtColor(np.ascontiguousarray(crop, dtype=np.uint8), cv2.COLOR_BGR2GRAY if bgr else cv2.COLOR_RGB2GRAY)
     _, b = cv2.threshold(g, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return float((b > 0).mean())

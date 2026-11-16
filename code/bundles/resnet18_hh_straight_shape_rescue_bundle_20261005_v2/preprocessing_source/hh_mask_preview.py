@@ -65,7 +65,7 @@ def main():
     S = 300
     canvas = Image.new("RGB", (3 * (S + 6) * 2, 40 + (a.n // 2) * (S + 26)), (245, 245, 245))
     d = ImageDraw.Draw(canvas)
-    d.text((8, 10), "usable 중 베드 많은 사진 / 원본 크롭 | 현환님 베드 화소(빨강) | 현환님 출력물 칸 밖 회색", font=font, fill="black")
+    d.text((8, 10), "usable 중 베드 많은 사진 / 원본 크롭 | 팀원 B 베드 화소(빨강) | 팀원 B 출력물 칸 밖 회색", font=font, fill="black")
     for i, r in enumerate(pick):
         bgr = cv2.imdecode(np.fromfile(src[f"{r['label']}/{r['frame']}"], np.uint8), cv2.IMREAD_COLOR)
         crop = cv2.cvtColor(bgr[0:1000, 250:1250], cv2.COLOR_BGR2RGB)
